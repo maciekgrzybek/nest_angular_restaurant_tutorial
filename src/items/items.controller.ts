@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UsePipes } from '@nestjs/common';
 import { ItemsService } from './items.service';
+import { ValidationPipe } from '../common/validation.pipe';
 
 @Controller('items')
 export class ItemsController {
@@ -11,7 +12,8 @@ export class ItemsController {
   }
 
   @Post()
-  async create(@Body() item: string) {
-    this.itemsService.create(item);
+  @UsePipes(new ValidationPipe())
+  async create(@Body() createItemDto: CreateItemDto) {
+    this.itemsService.create(createItemDto);
   }
 }
